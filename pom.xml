@@ -16,8 +16,14 @@
     <properties>
         <java.version>11</java.version>
         <querydsl.version>4.4.0</querydsl.version>
+        <p6spy.version>1.6.3</p6spy.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>com.github.gavlyukovskiy</groupId>
+            <artifactId>p6spy-spring-boot-starter</artifactId>
+            <version>${p6spy.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
