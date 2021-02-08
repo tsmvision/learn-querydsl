@@ -1,20 +1,17 @@
 package org.javastudy.learnquerydsl;
 
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.javastudy.learnquerydsl.entity.Member;
 import org.javastudy.learnquerydsl.entity.QMember;
 import org.javastudy.learnquerydsl.entity.Team;
 import org.javastudy.learnquerydsl.repository.MemberRepository;
 import org.javastudy.learnquerydsl.repository.TeamRepository;
-import org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -78,5 +75,31 @@ public class QuerydslBasicTest {
                 .fetchOne();
 
         assertEquals(member1.getUsername(), "member1");
+    }
+
+    @Test
+    public void search() {
+        QMember member = QMember.member;
+
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .where(member.username.eq("member1").and(member.age.eq(10))).fetchOne();
+
+        assertEquals(findMember.getUsername(), "member1");
+    }
+
+    @Test
+    public void searchAndParam() {
+        QMember member = QMember.member;
+
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .where(
+                        member.username.eq("member1"),
+                        member.age.eq(10)
+                )
+                .fetchOne();
+
+        assertEquals(findMember.getUsername(), "member1");
     }
 }
