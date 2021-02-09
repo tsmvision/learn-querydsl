@@ -9,6 +9,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.javastudy.learnquerydsl.dto.MemberDto;
+import org.javastudy.learnquerydsl.dto.QMemberDto;
 import org.javastudy.learnquerydsl.dto.UserDto;
 import org.javastudy.learnquerydsl.entity.Member;
 import org.javastudy.learnquerydsl.entity.QMember;
@@ -654,6 +655,20 @@ public class QuerydslBasicTest {
 
         for (UserDto userDto : result) {
             System.out.println("userDto = " + userDto);
+        }
+    }
+
+    @Test
+    public void findDtoByQueryProjection() {
+         QMember member = QMember.member;
+
+         List<MemberDto> result = queryFactory
+                 .select(new QMemberDto(member.username, member.age))
+                 .from(member)
+                 .fetch();
+
+        for (MemberDto memberDto : result) {
+            System.out.println("memberDto = " + memberDto);
         }
     }
 }
