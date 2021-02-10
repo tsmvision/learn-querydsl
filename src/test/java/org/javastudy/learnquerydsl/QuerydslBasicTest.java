@@ -11,9 +11,7 @@ import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.javastudy.learnquerydsl.dto.MemberDto;
-import org.javastudy.learnquerydsl.dto.QMemberDto;
-import org.javastudy.learnquerydsl.dto.UserDto;
+import org.javastudy.learnquerydsl.dto.*;
 import org.javastudy.learnquerydsl.entity.Member;
 import org.javastudy.learnquerydsl.entity.QMember;
 import org.javastudy.learnquerydsl.entity.QTeam;
@@ -750,4 +748,47 @@ public class QuerydslBasicTest {
         return usernameEq(username).and(ageEq(ageCond));
     }
 
+    @Test
+    public void bulkUpdate() {
+        QMember member = QMember.member;
+
+        long count = queryFactory
+                .update(member)
+                .set(member.username, "non-member")
+                .where(member.age.lt(28))
+                .execute();
+
+        em.flush();
+        em.clear();
+
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .fetch();
+
+        assertEquals(2, count);
+
+        for (Member member1 : result) {
+            System.out.println("member = " + member1);
+        }
+    }
+
+    @Test
+    public void bulkAdd() {
+        QMember member = QMember.member;
+
+        long count = queryFactory
+                .update(member)
+                .set(member.age, member.age.add(1))
+                .execute();
+    }
+
+    @Test
+    public void bulkDelete() {
+        QMember member = QMember.member;
+
+        long count = queryFactory
+                .delete(member)
+                .where(member.age.gt(20))
+                .execute();
+    }
 }
